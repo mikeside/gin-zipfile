@@ -1,0 +1,6 @@
+{
+  "app_name" : "gin-zipfile",
+  "app_mode" : "develop",
+  "app_host" : "localhost",
+  "app_port" : "8090"
+}
