@@ -15,6 +15,8 @@ func main() {
 
 	engine := gin.Default()
 
+	engine.LoadHTMLGlob("view/**/*")
+
 	registerRouter(engine)
 
 	engine.Run(cfg.AppHost + ":" + cfg.AppPort)
