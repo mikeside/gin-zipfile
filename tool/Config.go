@@ -15,8 +15,8 @@ type Config struct {
 
 var _cfg *Config = nil
 
-func ParseConfig(path string) (*Config,error) {
-	file,err := os.Open(path)
+func ParseConfig(path string) (*Config, error) {
+	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
 	}
@@ -25,8 +25,8 @@ func ParseConfig(path string) (*Config,error) {
 	reader := bufio.NewReader(file)
 	decoder := json.NewDecoder(reader)
 	if err := decoder.Decode(&_cfg); err != nil {
-		return _cfg,err
+		return _cfg, err
 	}
 
-	return _cfg,nil
+	return _cfg, nil
 }

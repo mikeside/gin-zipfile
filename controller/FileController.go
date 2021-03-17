@@ -8,40 +8,41 @@ import (
 )
 
 type FileController struct {
-
 }
 
-func (file *FileController) Router (engine *gin.Engine) {
-	engine.GET("/index",file.Index)
+func (file *FileController) Router(engine *gin.Engine) {
+	engine.GET("/index", file.Index)
 }
 
-func (file *FileController) Index (context *gin.Context) {
+func (file *FileController) Index(context *gin.Context) {
 
-	list,err := file.GetAllDir("public/file/")
+	list, err := file.GetAllDir("public/file/")
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	fmt.Println(list)
 
-	context.HTML(http.StatusOK,"index.html",list)
+	context.HTML(http.StatusOK, "index.html", gin.H{
+		"status": 1,
+		"data":   list,
+	})
 }
 
-func (file *FileController) GetAllDir (pathname string) ([]string,error) {
+func (file *FileController) GetAllDir(pathname string) ([]string, error) {
 
 	var tmpDir []string
 
-	list,err := ioutil.ReadDir(pathname)
+	list, err := ioutil.ReadDir(pathname)
 	if err != nil {
 		fmt.Println("read dir fail:", err)
-		return tmpDir,err
+		return tmpDir, err
 	}
 
-	for _,fi := range list {
+	for _, fi := range list {
 
 		if fi.IsDir() {
-			tmpDir = append(tmpDir,fi.Name())
+			tmpDir = append(tmpDir, fi.Name())
 		}
 	}
 
-	return tmpDir,nil
+	return tmpDir, nil
 }

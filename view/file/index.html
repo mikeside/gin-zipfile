@@ -48,7 +48,35 @@
         </div>
     </div>
     <div class="panel-body">
-        <div class="alert alert-info">没有任何项目记录，快去新建项目吧。</div>
+        {{ if .data }}
+            <div class="alert-warning">提示！若预览链接没有更新，清除浏览器缓存后重试。</div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>项目</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{ range .data }}
+                    <tr>
+                        <td>
+                            <a href="" target="_blank">{{ . }}</a>
+                            <span class="label label-success">Demo已上传</span>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#upload-demo" data-value="{{ . }}">上传Demo</button>
+                            <button type="button" class="btn btn-danger btn-sm del-project" data-value="{{ . }}">删除</button>
+                            <a class="btn btn-warning btn-sm" href="" target="_blank">预览</a>
+                        </td>
+                    </tr>
+                {{ end }}
+                </tbody>
+            </table>
+        {{ else }}
+                <div class="alert alert-info">没有任何项目记录，快去新建项目吧。</div>
+        {{ end }}
+
         {{/* 上传demo模板 */}}
         <div class="modal fade" id="upload-demo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">

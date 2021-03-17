@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	cfg,err := tool.ParseConfig("./config/app.json")
+	cfg, err := tool.ParseConfig("./config/app.json")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -23,6 +23,6 @@ func main() {
 }
 
 //路由注册
-func registerRouter(route *gin.Engine)  {
+func registerRouter(route *gin.Engine) {
 	new(controller.FileController).Router(route)
 }
