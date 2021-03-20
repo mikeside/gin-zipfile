@@ -25,6 +25,7 @@ type FileCreate struct {
 func (file *FileController) Router(engine *gin.Engine) {
 	engine.GET("/", file.Index)
 	engine.POST("/file/create", file.Create)
+	engine.POST("/file/del", file.Delete)
 }
 
 func (file *FileController) Index(context *gin.Context) {
@@ -64,6 +65,24 @@ func (file *FileController) Create(context *gin.Context) {
 		fmt.Println(v.Errors.One())
 		context.JSON(http.StatusOK, tool.Err.WithMsg(v.Errors.One()))
 	}
+}
+
+func (file *FileController) Delete(context *gin.Context) {
+
+	name := context.PostForm("name")
+	if name == "" {
+		context.JSON(http.StatusOK, tool.Err.WithMsg("参数错误"))
+		return
+	}
+
+	projectPath := filePath + "/" + name
+	if err := os.RemoveAll(projectPath); err != nil {
+		fmt.Println(err)
+		context.JSON(http.StatusOK, tool.Err.WithMsg("删除失败"))
+		return
+	}
+
+	context.JSON(http.StatusOK, tool.Ok.WithMsg("删除成功"))
 }
 
 func (file *FileController) GetAllDir(pathname string) ([]map[string]string, error) {
