@@ -62,7 +62,7 @@
                     <tr>
                         <td>
                             {{ if gt .count "0" }}
-                                <a href="" target="_blank">{{ .name }}</a>
+                                <a href="/public/file/{{ .name }}" target="_blank">{{ .name }}</a>
                                 <span class="label label-success">Demo已上传</span>
                             {{ else }}
                                 {{ .name }}
@@ -72,7 +72,7 @@
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#upload-demo" data-value="{{ .name }}">上传Demo</button>
                             <button type="button" class="btn btn-danger btn-sm del-project" data-value="{{ .name }}">删除</button>
                             {{ if gt .count "0" }}
-                                <a class="btn btn-warning btn-sm" href="" target="_blank">预览</a>
+                                <a class="btn btn-warning btn-sm" href="/public/file/{{ .name }}" target="_blank">预览</a>
                             {{ end }}
                         </td>
                     </tr>
@@ -187,7 +187,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/file/upload_demo',
+            url: '/file/upload/demo',
             data: formData,
             contentType: false,
             processData: false,

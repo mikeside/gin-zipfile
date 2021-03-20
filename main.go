@@ -15,14 +15,20 @@ func main() {
 
 	engine := gin.Default()
 
-	engine.LoadHTMLGlob("view/**/*")
-
 	registerRouter(engine)
+
+	initExtra(engine)
 
 	engine.Run(cfg.AppHost + ":" + cfg.AppPort)
 }
 
-//路由注册
+// 路由注册
 func registerRouter(route *gin.Engine) {
 	new(controller.FileController).Router(route)
+}
+
+// 额外初始化
+func initExtra(route *gin.Engine) {
+
+	route.LoadHTMLGlob("view/**/*")
 }
