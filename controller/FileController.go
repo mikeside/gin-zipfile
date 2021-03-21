@@ -132,7 +132,6 @@ func (file *FileController) UploadDemo(context *gin.Context) {
 		}
 
 		context.JSON(http.StatusOK, tool.Ok.WithMsg("上传成功"))
-
 	} else {
 		context.JSON(http.StatusOK, tool.Err.WithMsg(v.Errors.One()))
 	}

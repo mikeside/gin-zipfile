@@ -31,4 +31,6 @@ func registerRouter(route *gin.Engine) {
 func initExtra(route *gin.Engine) {
 
 	route.LoadHTMLGlob("view/**/*")
+
+	route.Static("/file/","./public/file")
 }
