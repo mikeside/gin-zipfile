@@ -133,11 +133,21 @@
                 skin: 'layui-layer-molv'
                 ,closeBtn: 0
             },function () {
-                if(res.code > 0){
-                    window.location.reload()
-                }
                 layui.layer.closeAll();
             });
+        });
+    }
+
+    function layerMsg(res)
+    {
+        layui.use('layer', function(){
+            layui.layer.msg(res.msg,{
+                time:0,
+                icon: 1
+            });
+            setTimeout(function () {
+                window.location.reload()
+            },2000)
         });
     }
 
@@ -153,9 +163,14 @@
     }
 
     $('#create-project').on('click',function () {
+        loading('处理中...');
         var name = $.trim($('#name').val());
         $.post('/file/create', 'name=' + name, function (res) {
-            layerAlert(res);
+            if (res.code > 0){
+                layerMsg(res)
+            }else{
+                layerAlert(res);
+            }
         });
     })
 
@@ -165,7 +180,11 @@
             loading('删除中...');
             var name = $(this).data('value');
             $.post('/file/del', 'name=' + name, function (res) {
-                layerAlert(res);
+                if (res.code > 0){
+                    layerMsg(res)
+                }else{
+                    layerAlert(res);
+                }
             });
         }
     });
@@ -197,7 +216,11 @@
             },
             success: function (res) {
                 console.log(res)
-                layerAlert(res);
+                if (res.code > 0){
+                    layerMsg(res)
+                }else{
+                    layerAlert(res);
+                }
             }
         });
     });
