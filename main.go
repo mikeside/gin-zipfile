@@ -32,5 +32,5 @@ func initExtra(route *gin.Engine) {
 
 	route.LoadHTMLGlob("view/**/*")
 
-	route.Static("/file/","./public/file")
+	route.Static("/file/", "./public/file")
 }

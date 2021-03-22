@@ -22,16 +22,18 @@ func New(src string, dest string) Unzip {
 	return Unzip{src, dest}
 }
 
-func (uz Unzip) Extract() error {
+func (uz Unzip) Extract() ([]string, error) {
+
+	var filename []string
 
 	zipReader, err := zip.OpenReader(uz.Src)
 	if err != nil {
-		return err
+		return filename, err
 	}
 	defer zipReader.Close()
 
 	var decodeName string
-	for _, f := range zipReader.File {
+	for key, f := range zipReader.File {
 
 		if utf8.Valid([]byte(f.Name)) {
 			decodeName = f.Name
@@ -44,30 +46,33 @@ func (uz Unzip) Extract() error {
 
 		fpath := filepath.Join(uz.Dest, decodeName)
 		if f.FileInfo().IsDir() {
+			if key == 0 {
+				filename = append(filename, decodeName)
+			}
 			os.MkdirAll(fpath, os.ModePerm)
 		} else {
 			if err = os.MkdirAll(filepath.Dir(fpath), os.ModePerm); err != nil {
-				return err
+				return filename, err
 			}
 
 			inFile, err := f.Open()
 			if err != nil {
-				return err
+				return filename, err
 			}
 			defer inFile.Close()
 
 			outFile, err := os.OpenFile(fpath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, f.Mode())
 			if err != nil {
-				return err
+				return filename, err
 			}
 			defer outFile.Close()
 
 			_, err = io.Copy(outFile, inFile)
 			if err != nil {
-				return err
+				return filename, err
 			}
 		}
 	}
 
-	return nil
+	return filename, nil
 }

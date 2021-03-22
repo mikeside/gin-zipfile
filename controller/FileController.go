@@ -9,15 +9,14 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
 )
 
 var (
-	filePath,_ = tool.Mkdir("public/file")
-	tempPath,_ = tool.Mkdir("public/temp")
+	filePath, _ = tool.Mkdir("public/file")
+	tempPath, _ = tool.Mkdir("public/temp")
 )
 
 type FileController struct {
@@ -125,7 +124,7 @@ func (file *FileController) UploadDemo(context *gin.Context) {
 
 		// 执行解压
 		projectPath := filePath + "/" + name
-		if err := file.Unzip(tempDemoPath,projectPath); err != nil {
+		if err := file.Unzip(tempDemoPath, projectPath); err != nil {
 			fmt.Println(err)
 			context.JSON(http.StatusOK, tool.Err.WithMsg("解压失败"))
 			return
@@ -139,19 +138,21 @@ func (file *FileController) UploadDemo(context *gin.Context) {
 
 func (file *FileController) Unzip(zipPath string, destPath string) error {
 
-	if err := tool.New(zipPath, tempPath).Extract(); err != nil {
+	filename, err := tool.New(zipPath, tempPath).Extract()
+	if err != nil {
 		return err
 	}
 
-	// 清空旧demo文件
+	// 清空旧demo文件和删除zip包
 	os.RemoveAll(destPath)
+	os.Remove(zipPath)
 
-	// 移动文件和删除zip包
-	oldDemoPath := tempPath + "/" + strings.TrimSuffix(path.Base(zipPath), path.Ext(zipPath))
+	// 移动文件
+	oldDemoPath := tempPath + "/" + strings.TrimSuffix(filename[0], "/")
 	if err := os.Rename(oldDemoPath, destPath); err != nil {
+		os.Mkdir(destPath, os.ModePerm)
 		return err
 	}
-	os.Remove(zipPath)
 
 	return nil
 }
